@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 
 # Create your views here.
@@ -28,3 +29,10 @@ class BookListView(generic.ListView):
 
 class BookDetails(generic.DetailView):
     model = Book
+
+class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+    model: BookInstance
+    template_name = 'catalog/loaned_books_user.html'
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(user=self.request.user).filter(status__exact='o').order_by('due_back')
