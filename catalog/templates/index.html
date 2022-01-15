@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    
+    <h1 >Minha Biblioteca - Página inicial</h1>
+    <p>Bem vindo à Minha Biblioteca, um site desenvolvido a partir do tutorial disponível em 
+        <a href="https://developer.mozilla.org/pt-BR/docs/Learn/Server-side/Django/Tutorial_local_library_website">
+            <em>Mozilla Developer Network</em>!
+        </a>
+    </p>
+
+    <h2>Conteúdo dinâmico</h2>
+    <p>A biblioteca tem atualmente os seguintes registros:</p>
+    <ul>
+        <li><strong>Livros:</strong> {{ num_books }}</li>
+        <li><strong>Exemplares:</strong> {{ num_books_instance }}</li>
+        <li><strong>Exemplares disponíveis:</strong> {{ num_available_books }}</li>
+        <li><strong>Autores:</strong> {{ num_authors }}</li>
+    </ul>
+
+{% endblock %}
