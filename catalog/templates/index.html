@@ -18,4 +18,6 @@
         <li><strong>Autores:</strong> {{ num_authors }}</li>
     </ul>
 
+    <p>Você já visitou esta página {{ num_visitors }}{% if num_visitors == 1 %} vez{% else %} vezes{% endif %}.</p>
+
 {% endblock %}
