@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import uuid
 
 # Create your models here.
@@ -25,7 +26,7 @@ class Author(models.Model):
         ordering = ['last_name', 'first_name']
     
     def getName(self):
-        return f'{self.first_name}, {self.last_name}'
+        return f'{self.first_name} {self.last_name}'
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
@@ -35,13 +36,16 @@ class Book(models.Model):
     genre = models.ManyToManyField(Genre, help_text="Selecione um genero")
     language = models.ForeignKey(Language, on_delete=models.SET_NULL,null=True)
 
+    def getAbsolutPath(self):
+        return reverse('book_details', args=[str(self.id)])
+
     def getTitle(self):
         return self.title
 
     def getCompleteInfo(self):
          return f'{self.title}, {self.author}, {self.summary}, {self.isbn}, {self.genre}, {self.language}'
 
-class BookInstace(models.Model):
+class BookInstance(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4, help_text="Identificador")
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     published_by = models.CharField(max_length=200)

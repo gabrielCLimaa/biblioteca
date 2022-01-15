@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views import generic
 from .models import *
 
 # Create your views here.
@@ -6,9 +7,9 @@ from .models import *
 def index(request):
 
     num_books = Book.objects.count()
-    num_books_instance = BookInstace.objects.count()
+    num_books_instance = BookInstance.objects.count()
 
-    num_available_books = BookInstace.objects.filter(status__exact='a').count()
+    num_available_books = BookInstance.objects.filter(status__exact='a').count()
 
     num_authors = Author.objects.count()
 
@@ -20,3 +21,9 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+class BookListView(generic.ListView):
+    model = Book
+
+class BookDetails(generic.DetailView):
+    model = Book
