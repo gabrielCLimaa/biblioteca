@@ -8,6 +8,9 @@
       {% for bookinstance in bookinstance_list %}
       <li class="{% if bookinstance.isLate %}text-danger{% endif %}">
         <a href="{% url 'book_details' bookinstance.book.pk %}">{{bookinstance.book.getTitle}}</a> ({{ bookinstance.due_back}})
+        {% if perms.catalog.can_renew_loan %}
+          <a href="{% url 'book_renew_loan' bookinstance.id %}"> - Renovar</a>  
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
