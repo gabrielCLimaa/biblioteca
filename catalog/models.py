@@ -26,6 +26,10 @@ class Author(models.Model):
 
     class Meta:
         ordering = ['last_name', 'first_name']
+        permissions = (("can_handle_author", "Manipula cadastro de autores."),)
+
+    def getAbsolutPath(self):
+        return reverse('author_details', args=[str(self.id)])
     
     def getName(self):
         return f'{self.first_name} {self.last_name}'

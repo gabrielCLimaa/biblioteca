@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from .models import *
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import permission_required
 from catalog.forms import RenewBookForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 import datetime
 
 # Create your views here.
@@ -46,7 +47,6 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
 @permission_required('catalog.can_renew_loan')
 def book_renew_loan(request, pk):
-    
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
     if request.method == 'POST':
@@ -69,3 +69,26 @@ def book_renew_loan(request, pk):
     }
 
     return render(request, 'catalog/book_renew_loan.html', context)
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'catalog.can_handle_author'
+    model = Author
+    fields = '__all__'
+    initial = {'day_of_death': '05/01/2018'}
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.can_handle_author'
+    model = Author
+    fields = ['first_name', 'last_name', 'day_of_birth', 'day_of_death']
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'catalog.can_handle_author'    
+    model = Author
+    success_url = reverse_lazy('authors')
